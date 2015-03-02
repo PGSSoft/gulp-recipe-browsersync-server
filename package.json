@@ -1,0 +1,23 @@
+{
+  "name": "gulp-recipe-browsersync-server",
+  "version": "0.1.0",
+  "description": "Receipe for serving files with autoreload",
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PGS-dev/gulp-recipe-browsersync-server.git"
+  },
+  "keywords": [
+    "PGS",
+    "gulp",
+    "gulp-receipe",
+    "browser-sync"
+  ],
+  "author": "PGS Front",
+  "license": "ISC",
+  "dependencies": {
+    "browser-sync": "^2.2.1",
+    "connect-history-api-fallback": "0.0.5",
+    "rimraf": "^2.2.8"
+  }
+}
