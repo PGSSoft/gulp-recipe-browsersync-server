@@ -13,9 +13,7 @@ module.exports = function ($, config, sources) {
      * @deps preServe
      */
     $.gulp.task(config.tasks.browserSyncServe, [config.tasks.browserSyncPreServe], function () {
-        var middleware = [];
-
-        $.browserSync(_.merge(config.browserSyncDev, {
+        $.browserSync(_.merge(config.browserSync.dev, {
             files: sources.devAssets.globs
         }));
     });
