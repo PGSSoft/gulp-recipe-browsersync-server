@@ -118,6 +118,5 @@ Runs all hooked preServe tasks just before server start, after watchers.
 
 [npm-url]: https://npmjs.org/package/gulp-recipe-browsersync-server
 [npm-image]: https://nodei.co/npm/gulp-recipe-browsersync-server.png?downloads=true
-
 [depstat-url]: https://david-dm.org/PGS-dev/gulp-recipe-browsersync-server
-[depstat-image]: http://img.shields.io/david/PGS-dev/gulp-recipe-browsersync-server.svg?style=flat
+[depstat-image]: https://img.shields.io/david/PGS-dev/gulp-recipe-browsersync-server.svg?style=flat
