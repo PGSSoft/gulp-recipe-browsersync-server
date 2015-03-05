@@ -6,25 +6,25 @@ Local development and distribution testing server with all [browsersync](http://
 ## Configuration
 ### Recipe specific
 #### browserSync
-> default: {}
+> default: {}<br>
 > type: object
 
 Browsersync [config options](http://www.browsersync.io/docs/options/), shared between both dev and dist server.
 
 #### browserSync.dev
-> default: {port: config.ports.dev, server: {baseDir: [config.paths.tmp, config.paths.app]}}
+> default: {port: config.ports.dev, server: {baseDir: [config.paths.tmp, config.paths.app]}}<br>
 > type: object
 
 Browsersync [config options](http://www.browsersync.io/docs/options/), specific for dev server. Merged with shared config.
 
 #### browserSync.dist
-> default: {port: config.ports.dist, server: {baseDir: config.paths.dist}}
+> default: {port: config.ports.dist, server: {baseDir: config.paths.dist}}<br>
 > type: object
 
 Browsersync [config options](http://www.browsersync.io/docs/options/), specific for dist server. Merged with shared config.
 
 #### browserSync.useHistoryApi
-> dev specific: browserSync.dev.useHistoryApi
+> dev specific: browserSync.dev.useHistoryApi<br>
 > dist specific: browserSync.dist.useHistoryApi
 
 Add history api handling middleware to selected environment.
@@ -77,31 +77,31 @@ Note: actual used port may be different, as browserSync performs a empty port sc
 
 ### Tasks
 #### tasks.browserSyncServe
-> alias: tasks.serve
+> alias: tasks.serve<br>
 > default: 'watch'
 
 _serve_ task name.
 
 #### tasks.browserSyncServeDist
-> alias: tasks.serveDist
+> alias: tasks.serveDist<br>
 > default: 'serve:dist'
 
 _serve:dist_ task name.
 
 #### tasks.browserSyncPreServe
-> alias: tasks.preServe
+> alias: tasks.preServe<br>
 > default: 'preServe'
 
 _preServe_ task name.
 
 #### tasks.browserSyncWatch
-> alias: tasks.watch
+> alias: tasks.watch<br>
 > default: 'watch'
 
 _watch_ task name.
 
 #### tasks.browserSyncCleanTemp
-> alias: tasks.cleanTemp
+> alias: tasks.cleanTemp<br>
 > default: 'clean:temp'
 
 _clean:temp_ task name.
