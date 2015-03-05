@@ -3,9 +3,7 @@ var paths = {};
 module.exports = function ($, config) {
     var _ = $.lodash;
 
-    if(_.isUndefined(config.sources.devAssets)) {
-        throw new $.utils.RecipeError('Mandatory config field `config.sources.devAssets` is missing.');
-    }
+    $.utils.checkMandatory(config, ['sources.devAssets']);
 
     // configure middleware
     var lazyHistoryApi = _.once(function lazyHistoryApi() {
