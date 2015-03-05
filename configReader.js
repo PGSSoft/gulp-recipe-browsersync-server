@@ -3,6 +3,10 @@ var paths = {};
 module.exports = function ($, config) {
     var _ = $.lodash;
 
+    if(_.isUndefined(config.sources.devAssets)) {
+        throw new $.utils.RecipeError('Mandatory config field `config.sources.devAssets` is missing.');
+    }
+
     // configure middleware
     var lazyHistoryApi = _.once(function lazyHistoryApi() {
         return $.connectHistoryApiFallback;
@@ -17,16 +21,21 @@ module.exports = function ($, config) {
         distMiddleware.push(lazyHistoryApi());
     }
 
+    // preconfigure defaults that may be used in further config
     config = _.merge({
         ports: {
-            dev: '3000',
-            dist: '3100'
+            dev: 3000,
+            prod: 3100
+        },
+        paths: {
+            app: 'app/',
+            tmp: 'tmp/',
+            dist: 'dist/'
         }
     }, config);
 
-
     var plainBS = _.omit(config.browserSync, 'dev', 'dist');
-    return $.lodash.merge({
+    config = $.lodash.merge({
             tasks: {
                 browserSyncServe: 'serve',
                 browserSyncServeDist: 'serve:dist',
@@ -38,14 +47,12 @@ module.exports = function ($, config) {
                 dev: {
                     port: config.ports.dev,
                     server: {
-                        baseDir: [config.paths.tmp, config.paths.app],
                         middleware: devMiddleware
                     }
                 },
                 dist: {
                     port: config.ports.dist,
                     server: {
-                        baseDir: [config.paths.dist],
                         middleware: distMiddleware
                     }
                 }
@@ -63,4 +70,15 @@ module.exports = function ($, config) {
                 dist: plainBS
             }
         }, config);
+
+    // assign these arrays only when not set alternatively, to prevent merge
+    if(!config.browserSync.dev.server.baseDir) {
+        config.browserSync.dev.server.baseDir = [config.paths.tmp, config.paths.app];
+    }
+
+    if(!config.browserSync.dist.server.baseDir) {
+        config.browserSync.dist.server.baseDir = [config.paths.dist];
+    }
+
+    return config;
 };
