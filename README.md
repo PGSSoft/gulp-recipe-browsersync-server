@@ -53,7 +53,7 @@ Browsersync [config options](http://www.browsersync.io/docs/options/), specific 
 
 Add history api handling middleware to selected environment.
 
-### Sources
+### [Sources](https://github.com/PGS-dev/gulp-recipe-loader#sources-configuration-syntax)
 #### sources.devAssets
 > mandatory
 
