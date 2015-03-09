@@ -3,6 +3,30 @@
 
 Local development and distribution testing server with all [browsersync](http://www.browsersync.io/) features. Provides global watch handler.
 
+## Tasks
+### serve
+> deps: preServe
+
+Run the whole development server stack, with browsersync with all its features as a server.
+
+### serve:dist
+
+Serve files from dist folder. **Note** that project needs to be built manually first.
+
+### preServe
+> deps: watch
+
+Run all preServe hooks.
+
+### watch
+> deps: clean:temp
+
+Run all watch hooks.
+
+### clean:temp
+
+Delete temp folder and its contents.
+
 ## Configuration
 ### Recipe specific
 #### browserSync
