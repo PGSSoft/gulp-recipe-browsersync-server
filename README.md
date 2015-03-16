@@ -140,6 +140,11 @@ Runs all hooked watch tasks before serve and preServe.
 
 Runs all hooked preServe tasks just before server start, after watchers.
 
+### Used Hooks
+#### pipes.devAsset*
+
+Watch source files in devAsset pipes.
+
 [npm-url]: https://npmjs.org/package/gulp-recipe-browsersync-server
 [npm-image]: https://nodei.co/npm/gulp-recipe-browsersync-server.png?downloads=true
 [depstat-url]: https://david-dm.org/PGS-dev/gulp-recipe-browsersync-server

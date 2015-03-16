@@ -13,7 +13,7 @@ module.exports = function ($, config, sources) {
      * @deps preServe
      */
     function browserSyncServeTask() {
-        var devAssetPipe = $.utils.queuedLazypipe($.utils.getPipes('devAsset'));
+        var devAssetPipe = $.utils.mergedLazypipe($.utils.getPipes('devAsset'));
 
         $.browserSync(_.merge(config.browserSync.dev, {
             files: _.union(sources.devAssets.globs, devAssetPipe.globs, sources.index.globs)
