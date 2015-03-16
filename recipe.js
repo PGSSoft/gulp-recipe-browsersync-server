@@ -12,11 +12,26 @@ module.exports = function ($, config, sources) {
      * @config tasks.serve
      * @deps preServe
      */
-    $.gulp.task(config.tasks.browserSyncServe, [config.tasks.browserSyncPreServe], function () {
+    function browserSyncServeTask() {
+        var devAssetPipe = $.utils.queuedLazypipe($.utils.getPipes('devAsset'));
+
         $.browserSync(_.merge(config.browserSync.dev, {
-            files: sources.devAssets.globs
+            files: _.union(sources.devAssets.globs, devAssetPipe.globs, sources.index.globs)
         }));
-    });
+    }
+
+    /**
+     * Serve files from dist folder. **Note** that project needs to be built manually first.
+     *
+     * @task serve
+     * @config tasks.browserSyncServe
+     * @config tasks.serve
+     * @deps preServe
+     */
+    function browserSyncServeDistTask() {
+        console.log(config.browserSync.dist);
+        $.browserSync(config.browserSync.dist);
+    }
 
     /**
      * Clears config.paths.tmp
@@ -25,9 +40,9 @@ module.exports = function ($, config, sources) {
      * @config tasks.browserSyncCleanTemp
      * @config tasks.cleanTemp
      */
-    $.gulp.task(config.tasks.browserSyncCleanTemp, function (cb) {
+    function browserSyncCleanTempTask(cb) {
         $.rimraf(config.paths.tmp, cb);
-    });
+    }
 
     /**
      * Runs all published preServe tasks, just before actual serve takes place
@@ -37,7 +52,7 @@ module.exports = function ($, config, sources) {
      * @config tasks.preServe
      * @deps watch
      */
-    $.gulp.task(config.tasks.browserSyncPreServe, [config.tasks.browserSyncWatch], function (cb) {
+    function browserSyncPreServeTask(cb) {
         var preServeHooks = _.chain($.recipes)
             .pluck('preServe')
             .filter()
@@ -45,7 +60,7 @@ module.exports = function ($, config, sources) {
             .value();
 
         $.utils.runSubtasks(preServeHooks, cb);
-    });
+    }
 
     /**
      * Starts all published watch tasks
@@ -55,7 +70,7 @@ module.exports = function ($, config, sources) {
      * @config tasks.watch
      * @deps clean:temp
      */
-    $.gulp.task(config.tasks.browserSyncWatch, [config.tasks.browserSyncCleanTemp], function (cb) {
+    function browserSyncWatchTask(cb) {
         var watchHooks = _.chain($.recipes)
             .pluck('watch')
             .filter()
@@ -63,7 +78,13 @@ module.exports = function ($, config, sources) {
             .value();
 
         $.utils.runSubtasks(watchHooks, cb);
-    });
+    }
+
+    $.utils.maybeTask(config.tasks.browserSyncServeDist, browserSyncServeDistTask);
+    $.utils.maybeTask(config.tasks.browserSyncServe, [config.tasks.browserSyncPreServe], browserSyncServeTask);
+    $.utils.maybeTask(config.tasks.browserSyncCleanTemp, browserSyncCleanTempTask);
+    $.utils.maybeTask(config.tasks.browserSyncWatch, [config.tasks.browserSyncCleanTemp], browserSyncWatchTask);
+    $.utils.maybeTask(config.tasks.browserSyncPreServe, [config.tasks.browserSyncWatch], browserSyncPreServeTask);
 
     return {};
 };

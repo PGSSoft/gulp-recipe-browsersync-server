@@ -23,7 +23,7 @@ module.exports = function ($, config) {
     config = _.merge({
         ports: {
             dev: 3000,
-            prod: 3100
+            dist: 3100
         },
         paths: {
             app: 'app/',
@@ -32,7 +32,6 @@ module.exports = function ($, config) {
         }
     }, config);
 
-    var plainBS = _.omit(config.browserSync, 'dev', 'dist');
     config = $.lodash.merge({
             tasks: {
                 browserSyncServe: 'serve',
@@ -62,12 +61,12 @@ module.exports = function ($, config) {
                 browserSyncPreServe: config.tasks.preServe,
                 browserSyncWatch: config.tasks.watch,
                 browserSyncCleanTemp: config.tasks.cleanTemp
-            },
-            browserSync: {
-                dev: plainBS,
-                dist: plainBS
             }
         }, config);
+
+    var plainBS = _.omit(_.clone(config.browserSync), 'dev', 'dist');
+    config.browserSync.dev = _.merge(_.cloneDeep(plainBS), config.browserSync.dev);
+    config.browserSync.dist = _.merge(_.cloneDeep(plainBS), config.browserSync.dist);
 
     // assign these arrays only when not set alternatively, to prevent merge
     if(!config.browserSync.dev.server.baseDir) {
@@ -76,6 +75,10 @@ module.exports = function ($, config) {
 
     if(!config.browserSync.dist.server.baseDir) {
         config.browserSync.dist.server.baseDir = [config.paths.dist];
+    }
+
+    if(!config.browserSync.dist.files) {
+        config.browserSync.dist.files = [config.paths.dist];
     }
 
     return config;
