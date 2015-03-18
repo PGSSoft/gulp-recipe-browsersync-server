@@ -3,56 +3,27 @@ var paths = {};
 module.exports = function ($, config) {
     var _ = $.lodash;
 
-    $.utils.checkMandatory(config, ['sources.devAssets']);
+    $.utils.checkMandatory(config, ['sources.assets']);
 
-    // configure middleware
-    var lazyHistoryApi = _.once(function lazyHistoryApi() {
-        return $.connectHistoryApiFallback;
-    });
-
-    config.browserSync = _.merge(config.browserSync || {}, {dev: {}, dist: {}});
-    var devMiddleware = [], distMiddleware = [];
-    if (config.browserSync.useHistoryApi || config.browserSync.dev.useHistoryApi) {
-        devMiddleware.push(lazyHistoryApi());
-    }
-    if (config.browserSync.useHistoryApi || config.browserSync.dist.useHistoryApi) {
-        distMiddleware.push(lazyHistoryApi());
-    }
-
-    // preconfigure defaults that may be used in further config
-    config = _.merge({
-        ports: {
-            dev: 3000,
-            dist: 3100
-        },
+    // extract shared browserSync config
+    var rawBS = _.merge(_.omit(config.browserSync || {}, ['dev', 'dist']), {server: {}});
+    config = $.lodash.merge({
         paths: {
             app: 'app/',
             tmp: 'tmp/',
             dist: 'dist/'
-        }
-    }, config);
-
-    config = $.lodash.merge({
-            tasks: {
+        },
+        browserSync: {
+            // apply shared as default
+            dev: _.cloneDeep(rawBS),
+            dist: _.cloneDeep(rawBS)
+        },
+        tasks: {
                 browserSyncServe: 'serve',
                 browserSyncServeDist: 'serve:dist',
                 browserSyncPreServe: 'preServe',
                 browserSyncWatch: 'watch',
                 browserSyncCleanTemp: 'clean:temp'
-            },
-            browserSync: {
-                dev: {
-                    port: config.ports.dev,
-                    server: {
-                        middleware: devMiddleware
-                    }
-                },
-                dist: {
-                    port: config.ports.dist,
-                    server: {
-                        middleware: distMiddleware
-                    }
-                }
             }
         }, {
             tasks: {
@@ -64,22 +35,24 @@ module.exports = function ($, config) {
             }
         }, config);
 
-    var plainBS = _.omit(_.clone(config.browserSync), 'dev', 'dist');
-    config.browserSync.dev = _.merge(_.cloneDeep(plainBS), config.browserSync.dev);
-    config.browserSync.dist = _.merge(_.cloneDeep(plainBS), config.browserSync.dist);
-
     // assign these arrays only when not set alternatively, to prevent merge
-    if(!config.browserSync.dev.server.baseDir) {
-        config.browserSync.dev.server.baseDir = [config.paths.tmp, config.paths.app];
-    }
+    config.browserSync.dev.server.baseDir = config.browserSync.dev.server.baseDir || [config.paths.tmp, config.paths.app];
+    config.browserSync.dist.server.baseDir = config.browserSync.dist.server.baseDir || [config.paths.dist];
 
-    if(!config.browserSync.dist.server.baseDir) {
-        config.browserSync.dist.server.baseDir = [config.paths.dist];
-    }
+    // add temp folder to watcher
+    var tempFiles = config.paths.tmp + '**';
+    // prepare only needed source globs, content and fs checking is not needed.
+    var watchGlobs = _.chain([config.sources.build, config.sources.assets, tempFiles])
+        .map($.utils.parseSources)
+        .flatten()
+        .filter(function (s) { return s.watch !== false; })
+        .pluck('files')
+        .value();
 
-    if(!config.browserSync.dist.files) {
-        config.browserSync.dist.files = [config.paths.dist];
-    }
+    config.browserSync.dev.files = _.union(_.filter([config.browserSync.dev.files]), watchGlobs);
+    config.browserSync.dist.files = _.union(_.filter([config.browserSync.dist.files]), [config.paths.dist]);
 
+    // remove original sources, so no unnecessary load is performed
+    config.sources = undefined;
     return config;
 };

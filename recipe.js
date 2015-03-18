@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function ($, config, sources) {
+module.exports = function ($, config) {
     var _ = $.lodash;
 
     /**
@@ -13,11 +13,7 @@ module.exports = function ($, config, sources) {
      * @deps preServe
      */
     function browserSyncServeTask() {
-        var devAssetPipe = $.utils.mergedLazypipe($.utils.getPipes('devAsset'));
-
-        $.browserSync(_.merge(config.browserSync.dev, {
-            files: _.union(sources.devAssets.globs, devAssetPipe.globs, sources.index.globs)
-        }));
+        $.browserSync(config.browserSync.dev);
     }
 
     /**
@@ -29,7 +25,6 @@ module.exports = function ($, config, sources) {
      * @deps preServe
      */
     function browserSyncServeDistTask() {
-        console.log(config.browserSync.dist);
         $.browserSync(config.browserSync.dist);
     }
 
