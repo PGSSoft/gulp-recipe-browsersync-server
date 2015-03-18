@@ -1,6 +1,6 @@
 {
   "name": "gulp-recipe-browsersync-server",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Receipe for serving files with autoreload",
   "main": "main.js",
   "repository": {
