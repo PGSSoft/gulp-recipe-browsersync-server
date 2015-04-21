@@ -19,21 +19,25 @@ module.exports = function ($, config) {
             dist: _.cloneDeep(rawBS)
         },
         tasks: {
-                browserSyncServe: 'serve',
-                browserSyncServeDist: 'serve:dist',
-                browserSyncPreServe: 'preServe',
-                browserSyncWatch: 'watch',
-                browserSyncCleanTemp: 'clean:temp'
-            }
-        }, {
-            tasks: {
-                browserSyncServe: config.tasks.serve,
-                browserSyncServeDist: config.tasks.serveDist,
-                browserSyncPreServe: config.tasks.preServe,
-                browserSyncWatch: config.tasks.watch,
-                browserSyncCleanTemp: config.tasks.cleanTemp
-            }
-        }, config);
+            browserSyncServe: 'serve',
+            browserSyncServeDist: 'serve:dist',
+            browserSyncPreServe: 'preServe',
+            browserSyncWatch: 'watch',
+            browserSyncCompile: 'compile',
+            browserSyncPostCompile: 'postCompile',
+            browserSyncCleanTemp: 'clean:temp'
+        }
+    }, {
+        tasks: {
+            browserSyncServe: config.tasks.serve,
+            browserSyncServeDist: config.tasks.serveDist,
+            browserSyncPreServe: config.tasks.preServe,
+            browserSyncWatch: config.tasks.watch,
+            browserSyncCompile: config.tasks.compile,
+            browserSyncPostCompile: config.tasks.postCompile,
+            browserSyncCleanTemp: config.tasks.cleanTemp
+        }
+    }, config);
 
     // assign these arrays only when not set alternatively, to prevent merge
     config.browserSync.dev.server.baseDir = config.browserSync.dev.server.baseDir || [config.paths.tmp, config.paths.app];

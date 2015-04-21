@@ -48,13 +48,7 @@ module.exports = function ($, config) {
      * @deps watch
      */
     function browserSyncPreServeTask(cb) {
-        var preServeHooks = _.chain($.recipes)
-            .pluck('preServe')
-            .filter()
-            .flatten()
-            .value();
-
-        $.utils.runSubtasks(preServeHooks, cb);
+        $.utils.runSubtasks($.utils.getHooks('preServe', $.recipes), cb);
     }
 
     /**
@@ -66,19 +60,23 @@ module.exports = function ($, config) {
      * @deps clean:temp
      */
     function browserSyncWatchTask(cb) {
-        var watchHooks = _.chain($.recipes)
-            .pluck('watch')
-            .filter()
-            .flatten()
-            .value();
+        $.utils.runSubtasks($.utils.getHooks('watch', $.recipes), cb);
+    }
 
-        $.utils.runSubtasks(watchHooks, cb);
+    function browserSyncCompileTask(cb) {
+        $.utils.runSubtasks($.utils.getHooks('compile', $.recipes), cb);
+    }
+
+    function browserSyncPostCompileTask(cb) {
+        $.utils.runSubtasks($.utils.getHooks('postCompile', $.recipes), cb);
     }
 
     $.utils.maybeTask(config.tasks.browserSyncServeDist, browserSyncServeDistTask);
     $.utils.maybeTask(config.tasks.browserSyncServe, [config.tasks.browserSyncPreServe], browserSyncServeTask);
     $.utils.maybeTask(config.tasks.browserSyncCleanTemp, browserSyncCleanTempTask);
-    $.utils.maybeTask(config.tasks.browserSyncWatch, [config.tasks.browserSyncCleanTemp], browserSyncWatchTask);
+    $.utils.maybeTask(config.tasks.browserSyncCompile, [config.tasks.browserSyncCleanTemp], browserSyncCompileTask);
+    $.utils.maybeTask(config.tasks.browserSyncPostCompile, [config.tasks.browserSyncCompile], browserSyncPostCompileTask);
+    $.utils.maybeTask(config.tasks.browserSyncWatch, [config.tasks.browserSyncPostCompile], browserSyncWatchTask);
     $.utils.maybeTask(config.tasks.browserSyncPreServe, [config.tasks.browserSyncWatch], browserSyncPreServeTask);
 
     return {};
