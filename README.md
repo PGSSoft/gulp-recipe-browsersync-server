@@ -1,4 +1,4 @@
-# [gulp-recipe](https://github.com/PGS-dev/gulp-recipe-loader)-browsersync-server [![Dependency Status][depstat-image]][depstat-url]
+# [gulp-recipe](https://github.com/PGSSoft/gulp-recipe-loader)-browsersync-server [![Dependency Status][depstat-image]][depstat-url]
 [![NPM][npm-image]][npm-url]
 
 Local development and distribution testing server with all [browsersync](http://www.browsersync.io/) features. Provides global watch handler.
@@ -53,7 +53,7 @@ Browsersync [config options](http://www.browsersync.io/docs/options/), specific 
 
 Add history api handling middleware to selected environment.
 
-### [Sources](https://github.com/PGS-dev/gulp-recipe-loader#sources-configuration-syntax)
+### [Sources](https://github.com/PGSSoft/gulp-recipe-loader#sources-configuration-syntax)
 #### sources.devAssets
 > mandatory
 
@@ -147,5 +147,5 @@ Watch source files in devAsset pipes.
 
 [npm-url]: https://npmjs.org/package/gulp-recipe-browsersync-server
 [npm-image]: https://nodei.co/npm/gulp-recipe-browsersync-server.png?downloads=true
-[depstat-url]: https://david-dm.org/PGS-dev/gulp-recipe-browsersync-server
-[depstat-image]: https://img.shields.io/david/PGS-dev/gulp-recipe-browsersync-server.svg?style=flat
+[depstat-url]: https://david-dm.org/PGSSoft/gulp-recipe-browsersync-server
+[depstat-image]: https://img.shields.io/david/PGSSoft/gulp-recipe-browsersync-server.svg?style=flat
